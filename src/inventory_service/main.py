@@ -12,6 +12,10 @@ def mark_unavailable(sku: str) -> None:
     logger.warning("inventory_unavailable", sku=sku)
 
 
-if __name__ == "__main__":
+def main() -> None:
     reserve_inventory("SKU-12345")
     mark_unavailable("SKU-99999")
+
+
+if __name__ == "__main__":
+    main()
