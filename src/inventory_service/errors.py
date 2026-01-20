@@ -25,3 +25,21 @@ class AppError(Exception):
             "error_message": self.message,
             "error_details": self.details or {},
         }
+
+
+class ValidationError(AppError):
+    """Raised when input validation fails."""
+
+    code: str = "VALIDATION_ERROR"
+
+
+class NotFoundError(AppError):
+    """Raised when a resource is not found."""
+
+    code: str = "NOT_FOUND"
+
+
+class InsufficientInventoryError(AppError):
+    """Raised when stock is insufficient."""
+
+    code: str = "INSUFFICIENT_INVENTORY"

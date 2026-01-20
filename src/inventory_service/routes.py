@@ -6,13 +6,38 @@ delegate to core business logic functions.
 """
 from fastapi import APIRouter
 
-from .main import reserve_inventory
-from .schemas import ReserveInventoryRequest, ReserveInventoryResponse
+from .schemas import (
+    CheckStockRequest,
+    CheckStockResponse,
+    ReserveStockRequest,
+    ReserveStockResponse,
+)
+from .service import check_stock, reserve_stock
 
 router = APIRouter()
 
 
-@router.post("/inventory/reserve", response_model=ReserveInventoryResponse)
-def reserve_inventory_route(req: ReserveInventoryRequest) -> ReserveInventoryResponse:
-    result = reserve_inventory(req.sku)
-    return ReserveInventoryResponse(reserved=result)
+@router.post("/inventory/check", response_model=CheckStockResponse, status_code=200)
+def check_stock_route(req: CheckStockRequest) -> CheckStockResponse:
+    result = check_stock(sku=req.sku, warehouse_id=req.warehouse_id)
+    return CheckStockResponse(
+        sku=result["sku"],
+        available=result["available"],
+        reserved=result["reserved"],
+        updated_at=result["updated_at"],
+    )
+
+
+@router.post("/inventory/reserve", response_model=ReserveStockResponse, status_code=200)
+def reserve_stock_route(req: ReserveStockRequest) -> ReserveStockResponse:
+    result = reserve_stock(
+        sku=req.sku,
+        warehouse_id=req.warehouse_id,
+        quantity=req.quantity,
+    )
+    return ReserveStockResponse(
+        sku=result["sku"],
+        available=result["available"],
+        reserved=result["reserved"],
+        updated_at=result["updated_at"],
+    )
