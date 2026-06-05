@@ -66,3 +66,30 @@ def reserve_stock(sku: str, warehouse_id: str, quantity: int) -> dict:
         "reserved": stock["reserved"] + quantity,
         "updated_at": datetime.utcnow(),
     }
+
+
+def release_reservation(sku: str, warehouse_id: str, quantity: int) -> dict:
+    logger.info(
+        "reservation_release_requested",
+        sku=sku,
+        warehouse_id=warehouse_id,
+        quantity=quantity,
+    )
+
+    if quantity <= 0:
+        raise ValidationError("quantity_must_be_positive")
+
+    stock = INVENTORY.get((sku, warehouse_id))
+    if not stock:
+        raise NotFoundError("sku_not_in_warehouse")
+
+    released = min(quantity, stock["reserved"])
+    logger.info(
+        "reservation_released", sku=sku, warehouse_id=warehouse_id, quantity=released
+    )
+    return {
+        "sku": sku,
+        "available": stock["available"] + released,
+        "reserved": stock["reserved"] - released,
+        "updated_at": datetime.utcnow(),
+    }
