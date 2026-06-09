@@ -11,7 +11,7 @@ from core_logger import get_logger
 
 from .errors import InsufficientInventoryError, NotFoundError, ValidationError
 
-logger = get_logger("inventory-service")
+logger = get_logger("inventory-service", tier="business")
 
 INVENTORY = {
     ("SKU-001", "WH-EAST"): {"available": 150, "reserved": 20},
