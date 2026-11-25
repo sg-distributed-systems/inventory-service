@@ -7,11 +7,11 @@ to prevent overselling.
 """
 from datetime import datetime
 
-from core_logger import get_logger
+from core_logger import Tier, get_logger
 
 from .errors import InsufficientInventoryError, NotFoundError, ValidationError
 
-logger = get_logger("inventory-service")
+logger = get_logger("inventory-service", tier=Tier.BUSINESS)
 
 INVENTORY = {
     ("SKU-001", "WH-EAST"): {"available": 150, "reserved": 20},
